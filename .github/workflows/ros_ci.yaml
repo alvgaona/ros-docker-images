@@ -1,0 +1,55 @@
+name: Build and Push ROS Docker Images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'humble/**'
+      - 'jazzy/**'
+      - '.github/workflows/ros_ci.yaml'
+  schedule:
+    # Run every Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ros_distro:
+          - humble
+          - jazzy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: alvgaona/ros
+          tags: |
+            type=raw,value=${{ matrix.ros_distro }}-desktop
+            type=raw,value=${{ matrix.ros_distro }}-desktop-{{date 'YYYYMMDD'}}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ matrix.ros_distro }}
+          file: ./${{ matrix.ros_distro }}/Dockerfile
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+
+      - name: Image digest
+        run: echo "Built image with tags - ${{ steps.meta.outputs.tags }}"
