@@ -33,21 +33,30 @@ RUN apt-get update && apt-get upgrade -y \
 RUN apt-get update && apt-get install -y \
     ros-jazzy-desktop \
     ros-dev-tools \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# Initialize rosdep
-RUN rosdep init && rosdep update
+# Create jazzy user with sudo privileges
+RUN useradd -m -s /bin/bash jazzy \
+    && echo "jazzy ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Set up workspace
-RUN mkdir -p /ros2_ws/src
-WORKDIR /ros2_ws
+# Initialize rosdep (must be done as root)
+RUN rosdep init
 
-# Source ROS 2 setup in bashrc
-RUN echo "source /opt/ros/jazzy/setup.bash" >> /root/.bashrc
-
-# Set entrypoint
+# Set entrypoint (must be done as root)
 COPY ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod +x /ros_entrypoint.sh
+
+# Switch to jazzy user
+USER jazzy
+WORKDIR /home/jazzy
+
+# Update rosdep as jazzy user
+RUN rosdep update
+
+WORKDIR /home/jazzy
+
+RUN echo "source /opt/ros/jazzy/setup.bash" >> /home/jazzy/.bashrc
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
