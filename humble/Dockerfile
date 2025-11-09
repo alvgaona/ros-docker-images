@@ -33,21 +33,39 @@ RUN apt-get update && apt-get upgrade -y \
 RUN apt-get update && apt-get install -y \
     ros-humble-desktop \
     ros-dev-tools \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# Initialize rosdep
-RUN rosdep init && rosdep update
+# Install Gazebo and ROS-Gazebo bridge packages
+RUN apt-get update && apt-get install -y \
+    ros-humble-ros-gz \
+    ros-humble-ros-gz-sim \
+    ros-humble-ros-gz-bridge \
+    ros-humble-ros-gz-interfaces \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set up workspace
-RUN mkdir -p /ros2_ws/src
-WORKDIR /ros2_ws
+# Create humble user with sudo privileges
+RUN useradd -m -s /bin/bash humble \
+    && echo "humble ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Source ROS 2 setup in bashrc
-RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
+# Initialize rosdep (must be done as root)
+RUN rosdep init
 
-# Set entrypoint
+# Set entrypoint (must be done as root)
 COPY ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod +x /ros_entrypoint.sh
+
+# Switch to humble user
+USER humble
+WORKDIR /home/humble
+
+# Update rosdep as humble user
+RUN rosdep update
+
+WORKDIR /home/humble
+
+# Source ROS 2 setup in bashrc
+RUN echo "source /opt/ros/humble/setup.bash" >> /home/humble/.bashrc
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
