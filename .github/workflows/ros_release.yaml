@@ -15,8 +15,8 @@ jobs:
             variant: desktop
           - ros_distro: jazzy
             variant: desktop
-          - ros_distro: humble
-            variant: vnc
+          # - ros_distro: humble
+          #   variant: vnc
 
     steps:
       - name: Checkout repository

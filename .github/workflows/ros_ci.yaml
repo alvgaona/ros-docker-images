@@ -7,7 +7,7 @@ on:
     paths:
       - 'humble/**'
       - 'jazzy/**'
-      - 'humble-vnc/**'
+      # - 'humble-vnc/**'
       - '.github/workflows/ros_ci.yaml'
   schedule:
     # Run every Sunday at 2 AM UTC
@@ -24,8 +24,8 @@ jobs:
             variant: desktop
           - ros_distro: jazzy
             variant: desktop
-          - ros_distro: humble
-            variant: vnc
+          # - ros_distro: humble
+          #   variant: vnc
 
     steps:
       - name: Checkout repository
