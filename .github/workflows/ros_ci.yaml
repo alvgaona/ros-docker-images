@@ -7,7 +7,7 @@ on:
     paths:
       - 'humble/**'
       - 'jazzy/**'
-      # - 'humble-vnc/**'
+      - 'humble-vnc/**'
       - '.github/workflows/ros_ci.yaml'
   schedule:
     # Run every Sunday at 2 AM UTC
