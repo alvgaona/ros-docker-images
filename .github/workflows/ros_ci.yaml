@@ -1,4 +1,4 @@
-name: Build and Push ROS Docker Images
+name: Build ROS Docker Images
 
 on:
   push:
