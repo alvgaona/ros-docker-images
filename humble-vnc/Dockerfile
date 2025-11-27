@@ -60,10 +60,13 @@ RUN apt-get update && apt-get install -y \
     xterm \
     x11-xserver-utils \
     mesa-utils \
+    autocutsel \
+    xclip \
     && rm -rf /var/lib/apt/lists/*
 
-# Create humble user with sudo privileges
+# Create humble user with sudo privileges and set password
 RUN useradd -m -s /bin/bash humble \
+    && echo "humble:humble" | chpasswd \
     && echo "humble ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Initialize rosdep (must be done as root)
@@ -89,6 +92,8 @@ RUN mkdir -p /home/humble/.vnc \
 RUN echo "#!/bin/bash" > /home/humble/.vnc/xstartup \
     && echo "unset SESSION_MANAGER" >> /home/humble/.vnc/xstartup \
     && echo "unset DBUS_SESSION_BUS_ADDRESS" >> /home/humble/.vnc/xstartup \
+    && echo "autocutsel -fork" >> /home/humble/.vnc/xstartup \
+    && echo "autocutsel -selection PRIMARY -fork" >> /home/humble/.vnc/xstartup \
     && echo "exec startxfce4" >> /home/humble/.vnc/xstartup \
     && chmod +x /home/humble/.vnc/xstartup
 
