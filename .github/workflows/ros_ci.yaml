@@ -8,6 +8,7 @@ on:
       - 'humble/**'
       - 'jazzy/**'
       - 'humble-vnc/**'
+      - 'jazzy-vnc/**'
       - '.github/workflows/ros_ci.yaml'
   schedule:
     # Run every Sunday at 2 AM UTC
@@ -24,6 +25,8 @@ jobs:
             variant: desktop
           - ros_distro: jazzy
             variant: desktop
+          - ros_distro: jazzy
+            variant: vnc
           # - ros_distro: humble
           #   variant: vnc
 
