@@ -40,6 +40,14 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Gazebo and ROS-Gazebo bridge packages
+RUN apt-get update && apt-get install -y \
+    ros-jazzy-ros-gz \
+    ros-jazzy-ros-gz-sim \
+    ros-jazzy-ros-gz-bridge \
+    ros-jazzy-ros-gz-interfaces \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create jazzy user with sudo privileges
 RUN useradd -m -s /bin/bash jazzy \
     && echo "jazzy ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
