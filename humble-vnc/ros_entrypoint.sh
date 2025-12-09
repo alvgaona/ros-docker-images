@@ -21,6 +21,9 @@ if [ -n "$HOST_UID" ] && [ -n "$HOST_GID" ]; then
     chown -R humble:humble /home/humble/.vnc 2>/dev/null || true
 fi
 
+# Ensure password is set for lock screen access
+echo "humble:humble" | chpasswd
+
 # Source ROS 2 setup
 source /opt/ros/humble/setup.bash
 

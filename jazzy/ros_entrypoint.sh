@@ -21,6 +21,9 @@ if [ -n "$HOST_UID" ] && [ -n "$HOST_GID" ]; then
     chown -R jazzy:jazzy /home/jazzy
 fi
 
+# Ensure password is set for lock screen access
+echo "jazzy:jazzy" | chpasswd
+
 # Source ROS 2 setup
 source /opt/ros/jazzy/setup.bash
 

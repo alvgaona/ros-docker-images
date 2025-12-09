@@ -50,6 +50,7 @@ RUN apt-get update && apt-get install -y \
 
 # Create humble user with sudo privileges
 RUN useradd -m -s /bin/bash humble \
+    && echo "humble:humble" | chpasswd \
     && echo "humble ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Initialize rosdep (must be done as root)
