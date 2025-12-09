@@ -64,7 +64,7 @@ RUN apt-get update && apt-get install -y \
     xclip \
     && rm -rf /var/lib/apt/lists/*
 
-# Create humble user with sudo privileges and set password
+# Create humble user with sudo privileges
 RUN useradd -m -s /bin/bash humble \
     && echo "humble:humble" | chpasswd \
     && echo "humble ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers

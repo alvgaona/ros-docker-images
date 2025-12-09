@@ -50,6 +50,7 @@ RUN apt-get update && apt-get install -y \
 
 # Create jazzy user with sudo privileges
 RUN useradd -m -s /bin/bash jazzy \
+    && echo "jazzy:jazzy" | chpasswd \
     && echo "jazzy ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Initialize rosdep (must be done as root)
