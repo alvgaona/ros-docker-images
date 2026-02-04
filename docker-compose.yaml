@@ -1,0 +1,56 @@
+services:
+  humble-desktop:
+    image: alvgaona/ros:humble-desktop
+    environment:
+      - DISPLAY=${DISPLAY}
+      - HOST_UID=${HOST_UID:-1000}
+      - HOST_GID=${HOST_GID:-1000}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./workspace:/workspace
+    stdin_open: true
+    tty: true
+    network_mode: host
+
+  humble-desktop-vnc:
+    image: alvgaona/ros:humble-desktop-vnc
+    environment:
+      - VNC_ENABLE=1
+      - VNC_RESOLUTION=${VNC_RESOLUTION:-1920x1080}
+      - VNC_DEPTH=${VNC_DEPTH:-24}
+      - HOST_UID=${HOST_UID:-1000}
+      - HOST_GID=${HOST_GID:-1000}
+    volumes:
+      - ./workspace:/workspace
+    ports:
+      - "5901:5901"
+    stdin_open: true
+    tty: true
+
+  jazzy-desktop:
+    image: alvgaona/ros:jazzy-desktop
+    environment:
+      - DISPLAY=${DISPLAY}
+      - HOST_UID=${HOST_UID:-1000}
+      - HOST_GID=${HOST_GID:-1000}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./workspace:/workspace
+    stdin_open: true
+    tty: true
+    network_mode: host
+
+  jazzy-desktop-vnc:
+    image: alvgaona/ros:jazzy-desktop-vnc
+    environment:
+      - VNC_ENABLE=1
+      - VNC_RESOLUTION=${VNC_RESOLUTION:-1920x1080}
+      - VNC_DEPTH=${VNC_DEPTH:-24}
+      - HOST_UID=${HOST_UID:-1000}
+      - HOST_GID=${HOST_GID:-1000}
+    volumes:
+      - ./workspace:/workspace
+    ports:
+      - "5901:5901"
+    stdin_open: true
+    tty: true
