@@ -8,6 +8,8 @@ Docker Hub Repository: https://hub.docker.com/r/alvgaona/ros
 - `alvgaona/ros:humble-desktop-vnc` - ROS 2 Humble with Desktop, Gazebo, and VNC support
 - `alvgaona/ros:jazzy-desktop` - ROS 2 Jazzy with Desktop and Gazebo
 - `alvgaona/ros:jazzy-desktop-vnc` - ROS 2 Jazzy with Desktop, Gazebo, and VNC support
+- `alvgaona/ros:rolling-desktop` - ROS 2 Rolling with Desktop and Gazebo
+- `alvgaona/ros:rolling-desktop-vnc` - ROS 2 Rolling with Desktop, Gazebo, and VNC support
 
 ## Usage
 
