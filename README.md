@@ -11,24 +11,33 @@ Docker Hub Repository: https://hub.docker.com/r/alvgaona/ros
 
 ## Usage
 
-### Standard Desktop Images
+### Standard Desktop Images (X Server Forwarding)
 
-When mounting volumes, pass your host UID and GID to ensure proper file permissions:
+These images are designed for **Linux hosts** where you can forward the X server directly from the host.
 
 ```bash
 docker run -it --rm \
+    -e DISPLAY=$DISPLAY \
     -e HOST_UID=$(id -u) \
     -e HOST_GID=$(id -g) \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v /your/local/path:/workspace \
     alvgaona/ros:humble-desktop \
     bash
+```
+
+You may need to allow X server connections from Docker:
+
+```bash
+xhost +local:docker
 ```
 
 This allows the container's user to match your host user, avoiding permission issues with mounted files.
 
 ### VNC Desktop Images
 
-The VNC variant includes a full desktop environment (XFCE) accessible via VNC:
+The VNC variant includes a full desktop environment (XFCE) accessible via VNC. Use these images on
+**macOS**, **Windows**, or **headless environments** where X server forwarding is not available.
 
 ```bash
 docker run -it --rm \
@@ -55,4 +64,24 @@ docker run -it --rm \
     -p 5901:5901 \
     alvgaona/ros:humble-desktop-vnc \
     bash
+```
+
+## Docker Compose
+
+A `docker-compose.yaml` is provided for convenience. Run any service with:
+
+```bash
+# Linux with X server forwarding
+docker compose run --rm humble-desktop
+
+# macOS/Windows/headless with VNC
+docker compose run --rm humble-desktop-vnc
+```
+
+Available services: `humble-desktop`, `humble-desktop-vnc`, `jazzy-desktop`, `jazzy-desktop-vnc`
+
+You can customize settings via environment variables:
+
+```bash
+HOST_UID=$(id -u) HOST_GID=$(id -g) VNC_RESOLUTION=1280x720 docker compose run --rm humble-desktop-vnc
 ```
